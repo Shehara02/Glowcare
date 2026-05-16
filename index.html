@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,6 +21,35 @@
             <!-- Logo -->
             <div class="navbar-logo">
                 <span class="logo-text"><img src="images/logo.jpg" alt="GlowCare Logo" class="logo"> GlowCare</span>
+            </div>
+            
+            <!-- Search Bar -->
+            <div class="search-container">
+                <input 
+                    type="text" 
+                    id="search-input" 
+                    class="search-input" 
+                    placeholder="Search products..."
+                >
+                <button id="search-btn" class="search-btn">🔍</button>
+            </div>
+            
+            <!-- Navbar Right Icons -->
+            <div class="navbar-icons">
+                <!-- Dark Mode Toggle -->
+                <button id="theme-toggle" class="navbar-icon theme-toggle" title="Toggle Dark Mode">🌙</button>
+                
+                <!-- Wishlist Icon -->
+                <button id="wishlist-toggle" class="navbar-icon wishlist-icon" title="Wishlist">
+                    ♡
+                    <span id="wishlist-count" class="icon-badge">0</span>
+                </button>
+                
+                <!-- Cart Icon -->
+                <button id="cart-toggle" class="navbar-icon cart-icon" title="Shopping Cart">
+                    🛒
+                    <span id="navbar-cart-count" class="icon-badge">0</span>
+                </button>
             </div>
             
             <!-- Menu Toggle for Mobile -->
@@ -79,58 +108,34 @@
                 <p class="section-subtitle">Explore our most loved skincare essentials</p>
             </div>
             
-            <div class="products-grid">
-                <!-- Product Card 1 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="images/moisturizer.jpg" alt="Hydrating Moisturizer">
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Hydrating Moisturizer</h3>
-                        <p class="product-description">Luxurious daily moisturizer with natural ingredients</p>
-                        <p class="product-price">$45.00</p>
-                        <button class="btn btn-add-cart">Add to Cart</button>
-                    </div>
+            <!-- Filters Section -->
+            <div class="filters-section">
+                <div class="filter-group">
+                    <label for="category-filter">Category:</label>
+                    <select id="category-filter" class="filter-select">
+                        <option value="all">All Categories</option>
+                        <option value="cleanser">Cleanser</option>
+                        <option value="serum">Serum</option>
+                        <option value="moisturizer">Moisturizer</option>
+                    </select>
                 </div>
-
-                <!-- Product Card 2 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="images/vitamin C.jpg" alt="Vitamin C Serum">
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Vitamin C Serum</h3>
-                        <p class="product-description">Brightening serum for radiant, glowing skin</p>
-                        <p class="product-price">$55.00</p>
-                        <button class="btn btn-add-cart">Add to Cart</button>
-                    </div>
+                
+                <div class="filter-group">
+                    <label for="skintype-filter">Skin Type:</label>
+                    <select id="skintype-filter" class="filter-select">
+                        <option value="all">All Skin Types</option>
+                        <option value="oily">Oily</option>
+                        <option value="dry">Dry</option>
+                        <option value="sensitive">Sensitive</option>
+                    </select>
                 </div>
-
-                <!-- Product Card 3 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="images/cleanser.jpg" alt="Gentle Face Cleanser">
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Gentle Face Cleanser</h3>
-                        <p class="product-description">Soft cleansing formula for all skin types</p>
-                        <p class="product-price">$28.00</p>
-                        <button class="btn btn-add-cart">Add to Cart</button>
-                    </div>
-                </div>
-
-                <!-- Product Card 4 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="images/night recovery mask.jpg" alt="Night Recovery Mask">
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Night Recovery Mask</h3>
-                        <p class="product-description">Intensive overnight treatment for deep hydration</p>
-                        <p class="product-price">$52.00</p>
-                        <button class="btn btn-add-cart">Add to Cart</button>
-                    </div>
-                </div>
+                
+                <button id="reset-filters" class="btn-reset-filters">Reset Filters</button>
+            </div>
+            
+            <!-- Products Grid -->
+            <div id="products-grid" class="products-grid">
+                <!-- Products will be rendered here dynamically -->
             </div>
         </div>
     </section>
@@ -325,7 +330,61 @@
         </div>
     </footer>
 
-    <!-- JavaScript -->
+    <!-- ========== CART MODAL ========== -->
+    <div id="cart-modal" class="modal">
+        <div class="modal-content cart-modal-content">
+            <div class="modal-header">
+                <h2>Shopping Cart</h2>
+                <button id="cart-close" class="modal-close">×</button>
+            </div>
+            <div id="cart-items" class="cart-items">
+                <!-- Cart items will be rendered here -->
+            </div>
+            <div class="cart-summary">
+                <div class="summary-row">
+                    <span>Subtotal:</span>
+                    <span id="cart-total">$0.00</span>
+                </div>
+                <div class="summary-row highlight">
+                    <span>Total:</span>
+                    <span id="cart-final-total">$0.00</span>
+                </div>
+                <button id="checkout-btn" class="btn btn-primary" style="width: 100%; margin-top: 20px;">Proceed to Checkout</button>
+                <button id="clear-cart-btn" class="btn-secondary" style="width: 100%; margin-top: 10px;">Clear Cart</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== WISHLIST MODAL ========== -->
+    <div id="wishlist-modal" class="modal">
+        <div class="modal-content wishlist-modal-content">
+            <div class="modal-header">
+                <h2>My Wishlist</h2>
+                <button id="wishlist-close" class="modal-close">×</button>
+            </div>
+            <div id="wishlist-items" class="wishlist-items">
+                <!-- Wishlist items will be rendered here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== MODAL OVERLAY ========== -->
+    <div id="modal-overlay" class="modal-overlay"></div>
+
+    <!-- ========== SCRIPTS ========== -->
+    <!-- Product Data -->
+    <script src="products.js"></script>
+    
+    <!-- Cart Management -->
+    <script src="cart.js"></script>
+    
+    <!-- Wishlist Management -->
+    <script src="wishlist.js"></script>
+    
+    <!-- UI Utilities -->
+    <script src="ui.js"></script>
+    
+    <!-- Main Application -->
     <script src="script.js"></script>
 </body>
 </html>
